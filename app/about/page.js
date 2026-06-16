@@ -1,6 +1,7 @@
 import { PageShell } from "@/app/site-nav";
 import {
   aboutParagraphs,
+  aboutVideoUrls,
   loadAboutContent,
   youtubeEmbedUrl
 } from "@/lib/site-content";
@@ -9,7 +10,9 @@ export const dynamic = "force-dynamic";
 
 export default async function AboutPage() {
   const content = await loadAboutContent();
-  const embedUrl = youtubeEmbedUrl(content.videoUrl);
+  const embedUrls = aboutVideoUrls(content)
+    .map((url) => youtubeEmbedUrl(url))
+    .filter(Boolean);
 
   return (
     <PageShell active="about" socials>
@@ -19,16 +22,16 @@ export default async function AboutPage() {
             <p key={paragraph}>{paragraph}</p>
           ))}
         </div>
-        {embedUrl ? (
-          <div className="video-embed">
+        {embedUrls.map((embedUrl, index) => (
+          <div className="video-embed" key={embedUrl}>
             <iframe
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
               src={embedUrl}
-              title="About Nick Rizzo Daily"
+              title={`About Nick Rizzo Daily video ${index + 1}`}
             />
           </div>
-        ) : null}
+        ))}
       </section>
     </PageShell>
   );

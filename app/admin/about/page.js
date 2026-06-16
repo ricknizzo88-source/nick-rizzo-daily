@@ -1,11 +1,12 @@
 import { updateAboutContent } from "@/app/actions";
 import { PageShell } from "@/app/site-nav";
-import { loadAboutContent } from "@/lib/site-content";
+import { aboutVideoUrls, loadAboutContent } from "@/lib/site-content";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminAboutPage() {
   const content = await loadAboutContent({ admin: true });
+  const videoUrls = aboutVideoUrls(content).join("\n");
 
   return (
     <PageShell
@@ -25,12 +26,12 @@ export default async function AdminAboutPage() {
             />
           </label>
           <label>
-            Long-form video URL
-            <input
-              defaultValue={content.videoUrl}
-              name="video_url"
+            Long-form video URLs
+            <textarea
+              defaultValue={videoUrls}
+              name="video_urls"
               placeholder="https://www.youtube.com/watch?v=..."
-              type="url"
+              rows={4}
             />
           </label>
           <div className="actions">

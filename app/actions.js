@@ -56,7 +56,10 @@ export async function updateAboutContent(formData) {
 
   const supabase = createSupabaseAdminClient();
   const body = String(formData.get("body") ?? "").trim();
-  const videoUrl = String(formData.get("video_url") ?? "").trim();
+  const videoUrls = String(formData.get("video_urls") ?? "")
+    .split(/\n+/)
+    .map((url) => url.trim())
+    .filter(Boolean);
 
   if (!body) {
     throw new Error("About text is required.");
@@ -67,7 +70,8 @@ export async function updateAboutContent(formData) {
       key: "about",
       value: {
         body,
-        videoUrl
+        videoUrl: videoUrls[0] ?? "",
+        videoUrls
       }
     },
     { onConflict: "key" }

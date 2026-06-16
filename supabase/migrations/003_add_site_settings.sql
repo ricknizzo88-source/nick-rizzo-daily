@@ -30,7 +30,9 @@ values (
     'After reviewing hundreds of restaurants on social media, I built this site to make those recommendations easier to explore.' || chr(10) || chr(10) ||
     'Think of it as a searchable archive of my food adventures—organized by location, cuisine, and category so you can find your next meal without digging through endless videos.',
     'videoUrl',
-    'https://www.youtube.com/watch?v=4LIt-vYJRuo'
+    'https://www.youtube.com/watch?v=4LIt-vYJRuo',
+    'videoUrls',
+    jsonb_build_array('https://www.youtube.com/watch?v=4LIt-vYJRuo')
   )
 )
 on conflict (key) do nothing;
