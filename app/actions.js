@@ -51,6 +51,35 @@ export async function logoutAdmin() {
   redirect("/");
 }
 
+export async function updateAboutContent(formData) {
+  await requireAdmin();
+
+  const supabase = createSupabaseAdminClient();
+  const body = String(formData.get("body") ?? "").trim();
+  const videoUrl = String(formData.get("video_url") ?? "").trim();
+
+  if (!body) {
+    throw new Error("About text is required.");
+  }
+
+  const { error } = await supabase.from("site_settings").upsert(
+    {
+      key: "about",
+      value: {
+        body,
+        videoUrl
+      }
+    },
+    { onConflict: "key" }
+  );
+
+  if (error) {
+    throw new Error(`Unable to update About Me content: ${error.message}`);
+  }
+
+  redirect("/about");
+}
+
 export async function updatePlace(formData) {
   await requireAdmin();
 

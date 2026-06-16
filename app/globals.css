@@ -163,14 +163,25 @@ label {
 }
 
 input,
-select {
+select,
+textarea {
   width: 100%;
-  min-height: 42px;
   border: 1px solid var(--line);
   border-radius: 8px;
   color: var(--ink);
   font: inherit;
+}
+
+input,
+select {
+  min-height: 42px;
   padding: 0 10px;
+}
+
+textarea {
+  min-height: 180px;
+  padding: 10px;
+  resize: vertical;
 }
 
 .places {

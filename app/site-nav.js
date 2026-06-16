@@ -7,7 +7,8 @@ export function SiteNav({ active, includeAdmin = false }) {
     ...(includeAdmin
       ? [
           ["Review Queue", "/review", "review"],
-          ["Manage Places", "/admin/places", "manage"]
+          ["Manage Places", "/admin/places", "manage"],
+          ["Edit About", "/admin/about", "about-admin"]
         ]
       : [])
   ];

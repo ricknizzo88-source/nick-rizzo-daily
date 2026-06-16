@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 
-const PROTECTED_PREFIXES = ["/review", "/admin/places", "/places/edit"];
+const PROTECTED_PREFIXES = [
+  "/review",
+  "/admin/places",
+  "/admin/about",
+  "/places/edit"
+];
 
 function adminAuthConfigured() {
   return Boolean(process.env.ADMIN_PASSWORD && process.env.ADMIN_SESSION_TOKEN);
@@ -33,5 +38,10 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/review/:path*", "/admin/places/:path*", "/places/edit/:path*"]
+  matcher: [
+    "/review/:path*",
+    "/admin/places/:path*",
+    "/admin/about/:path*",
+    "/places/edit/:path*"
+  ]
 };
