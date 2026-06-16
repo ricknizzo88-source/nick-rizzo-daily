@@ -1,0 +1,28 @@
+{
+  "name": "instagram-supabase-grid",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "import:instagram": "node scripts/import-instagram-posts.mjs",
+    "seed:mock": "node scripts/seed-mock-instagram-posts.mjs",
+    "seed:url": "node scripts/seed-instagram-url.mjs",
+    "seed:youtube": "node scripts/seed-youtube-short.mjs",
+    "sync:youtube": "node scripts/sync-youtube-shorts.mjs",
+    "preview": "node scripts/preview-server.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.12.0",
+    "eslint-config-next": "^15.0.0"
+  }
+}
