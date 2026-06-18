@@ -4,19 +4,23 @@ import { loadDirectoryPlaces } from "@/lib/directory";
 
 export const dynamic = "force-dynamic";
 
-export default async function ManagePlacesPage() {
+export default async function HiddenPlacesPage() {
   const places = (await loadDirectoryPlaces({ admin: true })).filter(
-    (place) => place.videos.length > 0
+    (place) => place.videos.length === 0
   );
 
   return (
     <PageShell
-      active="manage"
-      count={`${places.length} places`}
+      active="hidden"
+      count={`${places.length} hidden`}
       includeAdmin
-      eyebrow="Manage directory"
+      eyebrow="Hidden places"
     >
-      <DirectoryGrid admin places={places} />
+      <DirectoryGrid
+        admin
+        emptyMessage="No hidden places right now."
+        places={places}
+      />
     </PageShell>
   );
 }

@@ -8,6 +8,7 @@ export function SiteNav({ active, includeAdmin = false }) {
       ? [
           ["Review Queue", "/review", "review"],
           ["Manage Places", "/admin/places", "manage"],
+          ["Hidden", "/admin/hidden", "hidden"],
           ["Edit About", "/admin/about", "about-admin"]
         ]
       : [])

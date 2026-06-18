@@ -17,7 +17,11 @@ function groupPlaces(places) {
   return [...grouped.entries()];
 }
 
-export function DirectoryGrid({ admin = false, places }) {
+export function DirectoryGrid({
+  admin = false,
+  emptyMessage = "No mapped places yet. Use the review queue to attach videos to places.",
+  places
+}) {
   const [query, setQuery] = useState("");
   const [city, setCity] = useState("");
   const [category, setCategory] = useState("");
@@ -61,7 +65,7 @@ export function DirectoryGrid({ admin = false, places }) {
   if (places.length === 0) {
     return (
       <div className="empty-state">
-        No mapped places yet. Use the review queue to attach videos to places.
+        {emptyMessage}
       </div>
     );
   }

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { PageShell } from "@/app/site-nav";
-import { removeVideoFromPlace, updatePlace } from "@/app/actions";
+import { deletePlace, removeVideoFromPlace, updatePlace } from "@/app/actions";
 import { loadPlace } from "@/lib/directory";
 
 export const dynamic = "force-dynamic";
@@ -106,6 +106,23 @@ export default async function EditPlacePage({ searchParams }) {
             <input name="video_id" type="hidden" value={video.id} />
           </form>
         ))}
+        <form action={deletePlace} className="danger-zone">
+          <input name="place_id" type="hidden" value={place.id} />
+          <div>
+            <h2>Remove place</h2>
+            <p>
+              This removes the place from Food Tracker and archives its linked
+              videos.
+            </p>
+          </div>
+          <label className="checkbox-label">
+            <input name="confirm_delete" type="checkbox" />
+            Yes, remove this place
+          </label>
+          <button className="button danger" type="submit">
+            Remove place
+          </button>
+        </form>
       </section>
     </PageShell>
   );

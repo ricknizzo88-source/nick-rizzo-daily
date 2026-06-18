@@ -171,7 +171,57 @@ export async function removeVideoFromPlace(formData) {
     throw new Error(`Unable to remove video from place: ${error.message}`);
   }
 
+  const { count, error: countError } = await supabase
+    .from("food_videos")
+    .select("id", { count: "exact", head: true })
+    .eq("restaurant_id", placeId)
+    .in("status", ["review", "published"]);
+
+  if (countError) {
+    throw new Error(`Unable to refresh place videos: ${countError.message}`);
+  }
+
+  if (count === 0) {
+    redirect("/admin/hidden");
+  }
+
   redirect(`/places/edit?id=${encodeURIComponent(placeId)}`);
+}
+
+export async function deletePlace(formData) {
+  await requireAdmin();
+
+  const supabase = createSupabaseAdminClient();
+  const placeId = String(formData.get("place_id") ?? "").trim();
+  const confirmed = formData.get("confirm_delete") === "on";
+
+  if (!placeId || !confirmed) {
+    throw new Error("Confirm the place removal before deleting.");
+  }
+
+  const { error: videoError } = await supabase
+    .from("food_videos")
+    .update({
+      restaurant_id: null,
+      dish_name: null,
+      status: "archived"
+    })
+    .eq("restaurant_id", placeId);
+
+  if (videoError) {
+    throw new Error(`Unable to archive linked videos: ${videoError.message}`);
+  }
+
+  const { error } = await supabase
+    .from("restaurants")
+    .delete()
+    .eq("id", placeId);
+
+  if (error) {
+    throw new Error(`Unable to remove place: ${error.message}`);
+  }
+
+  redirect("/admin/places");
 }
 
 export async function saveReviewPlace(formData) {
