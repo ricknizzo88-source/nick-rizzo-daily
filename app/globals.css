@@ -406,4 +406,52 @@ form,
   color: var(--rose);
   font-weight: 800;
   text-decoration-thickness: 2px;
-  text-underline-offset
+  text-underline-offset: 4px;
+}
+
+.linked-videos {
+  display: grid;
+  gap: 10px;
+}
+
+.linked-video {
+  display: grid;
+  gap: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.linked-video-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.linked-video-title {
+  font-weight: 800;
+}
+
+@media (max-width: 720px) {
+  .page-shell {
+    width: min(100% - 24px, 1180px);
+    padding-top: 28px;
+  }
+
+  .masthead {
+    display: grid;
+    align-items: start;
+  }
+
+  .header-actions {
+    justify-items: start;
+  }
+
+  .filters,
+  .form-grid,
+  .place,
+  .review-card {
+    grid-template-columns: 1fr;
+  }
+}
