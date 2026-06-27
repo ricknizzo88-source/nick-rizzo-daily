@@ -99,13 +99,4 @@ export function PageShell({
         <div>
           <p className="eyebrow">{eyebrow}</p>
         </div>
-        <div className="header-actions">
-          {count ? <p className="count">{count}</p> : null}
-          {socials ? <SocialLinks /> : null}
-        </div>
-      </header>
-      <SiteNav active={active} includeAdmin={includeAdmin} />
-      {children}
-    </main>
-  );
-}
+       

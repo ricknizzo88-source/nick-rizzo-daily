@@ -48,19 +48,4 @@ export async function POST(request) {
         return NextResponse.json({ ok: true, tracked: false });
       }
 
-      throw new Error(`Unable to track page view: ${error.message}`);
-    }
-
-    return NextResponse.json({ ok: true, tracked: true });
-  } catch (error) {
-    return NextResponse.json(
-      {
-        ok: false,
-        error: error.message
-      },
-      {
-        status: 500
-      }
-    );
-  }
-}
+      throw new Error(`Unable to track page view: ${error.message}`
