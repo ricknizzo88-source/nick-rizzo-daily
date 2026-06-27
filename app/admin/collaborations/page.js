@@ -1,6 +1,7 @@
 import { CollaborationForm } from "@/app/admin/collaborations/collaboration-form";
 import { PageShell } from "@/app/site-nav";
 import { loadCollaborations } from "@/lib/collaborations";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -38,6 +39,14 @@ export default async function ManageCollaborationsPage() {
                   {formatYear(partner.partnership_date)}
                   {partner.is_published ? "" : " / Hidden"}
                 </div>
+              </div>
+              <div className="actions">
+                <Link
+                  className="button"
+                  href={`/admin/collaborations/edit?id=${partner.id}`}
+                >
+                  Edit
+                </Link>
               </div>
               {partner.videos.length ? (
                 <div className="chips">

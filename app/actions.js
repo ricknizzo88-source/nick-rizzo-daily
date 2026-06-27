@@ -14,6 +14,16 @@ function aboutEditorError(message) {
   redirect(`/admin/about?error=${encodeURIComponent(message)}`);
 }
 
+function yearToDate(year) {
+  const value = String(year ?? "").trim();
+
+  if (!value) {
+    return null;
+  }
+
+  return `${value}-01-01`;
+}
+
 async function requireAdmin() {
   if (!adminAuthConfigured()) {
     return;
@@ -116,7 +126,7 @@ export async function createCollaboration(formData) {
     throw new Error("Partner name is required.");
   }
 
-  const partnershipDate = partnershipYear ? `${partnershipYear}-01-01` : null;
+  const partnershipDate = yearToDate(partnershipYear);
 
   const { data: partner, error } = await supabase
     .from("collaboration_partners")
@@ -151,6 +161,111 @@ export async function createCollaboration(formData) {
     }
   }
 
+  revalidatePath("/collaborations");
+  revalidatePath("/admin/collaborations");
+  redirect("/admin/collaborations");
+}
+
+export async function updateCollaboration(formData) {
+  await requireAdmin();
+
+  const supabase = createSupabaseAdminClient();
+  const partnerId = String(formData.get("partner_id") ?? "").trim();
+  const partnerName = String(formData.get("partner_name") ?? "").trim();
+  const partnershipYear = String(formData.get("partnership_year") ?? "").trim();
+  const videoIds = formData
+    .getAll("video_id")
+    .map((value) => String(value ?? "").trim());
+  const videoTitles = formData
+    .getAll("video_title")
+    .map((value) => String(value ?? "").trim());
+  const videoUrls = formData
+    .getAll("video_url")
+    .map((value) => String(value ?? "").trim());
+
+  if (!partnerId || !partnerName) {
+    throw new Error("Partner id and name are required.");
+  }
+
+  const { error } = await supabase
+    .from("collaboration_partners")
+    .update({
+      partner_name: partnerName,
+      partnership_date: yearToDate(partnershipYear)
+    })
+    .eq("id", partnerId);
+
+  if (error) {
+    throw new Error(`Unable to update brand partner: ${error.message}`);
+  }
+
+  const { data: existingVideos, error: existingError } = await supabase
+    .from("collaboration_videos")
+    .select("id")
+    .eq("partner_id", partnerId);
+
+  if (existingError) {
+    throw new Error(`Unable to load existing videos: ${existingError.message}`);
+  }
+
+  const existingIds = new Set((existingVideos ?? []).map((video) => video.id));
+  const keptIds = new Set();
+
+  for (const [index, url] of videoUrls.entries()) {
+    if (!url) {
+      continue;
+    }
+
+    const videoId = videoIds[index];
+    const video = {
+      partner_id: partnerId,
+      title: videoTitles[index] || `Video ${index + 1}`,
+      url,
+      sort_order: index
+    };
+
+    if (videoId && existingIds.has(videoId)) {
+      keptIds.add(videoId);
+      const { error: videoError } = await supabase
+        .from("collaboration_videos")
+        .update({
+          title: video.title,
+          url: video.url,
+          sort_order: video.sort_order
+        })
+        .eq("id", videoId)
+        .eq("partner_id", partnerId);
+
+      if (videoError) {
+        throw new Error(`Unable to update video: ${videoError.message}`);
+      }
+    } else {
+      const { error: videoError } = await supabase
+        .from("collaboration_videos")
+        .insert(video);
+
+      if (videoError) {
+        throw new Error(`Unable to add video: ${videoError.message}`);
+      }
+    }
+  }
+
+  const removedIds = [...existingIds].filter((id) => !keptIds.has(id));
+
+  if (removedIds.length > 0) {
+    const { error: deleteError } = await supabase
+      .from("collaboration_videos")
+      .delete()
+      .in("id", removedIds)
+      .eq("partner_id", partnerId);
+
+    if (deleteError) {
+      throw new Error(`Unable to remove videos: ${deleteError.message}`);
+    }
+  }
+
+  revalidatePath("/collaborations");
+  revalidatePath("/admin/collaborations");
   redirect("/admin/collaborations");
 }
 

@@ -32,7 +32,9 @@ export default async function CollaborationsPage() {
             <article className="collaboration-card" key={partner.id}>
               <div>
                 <h2>{partner.partner_name}</h2>
-                <div className="meta">{formatYear(partner.partnership_date)}</div>
+                <div className="meta">
+                  {formatYear(partner.partnership_date)}
+                </div>
               </div>
               {partner.videos.length ? (
                 <div className="chips">
