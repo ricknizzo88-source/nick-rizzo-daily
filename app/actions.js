@@ -10,6 +10,10 @@ function adminAuthConfigured() {
   return Boolean(process.env.ADMIN_PASSWORD && process.env.ADMIN_SESSION_TOKEN);
 }
 
+function aboutEditorError(message) {
+  redirect(`/admin/about?error=${encodeURIComponent(message)}`);
+}
+
 async function requireAdmin() {
   if (!adminAuthConfigured()) {
     return;
@@ -63,7 +67,7 @@ export async function updateAboutContent(formData) {
     .filter(Boolean);
 
   if (!body) {
-    throw new Error("About text is required.");
+    aboutEditorError("About text is required.");
   }
 
   const value = {
@@ -79,7 +83,7 @@ export async function updateAboutContent(formData) {
     .maybeSingle();
 
   if (lookupError) {
-    throw new Error(`Unable to load About Me setting: ${lookupError.message}`);
+    aboutEditorError(`Unable to load About Me setting: ${lookupError.message}`);
   }
 
   const { error } = existing
@@ -93,7 +97,7 @@ export async function updateAboutContent(formData) {
       });
 
   if (error) {
-    throw new Error(`Unable to update About Me content: ${error.message}`);
+    aboutEditorError(`Unable to update About Me content: ${error.message}`);
   }
 
   revalidatePath("/about");

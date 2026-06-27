@@ -279,6 +279,15 @@ textarea {
   padding: 12px;
 }
 
+.error-state {
+  border: 1px solid rgba(193, 79, 103, 0.28);
+  border-radius: 8px;
+  background: rgba(193, 79, 103, 0.08);
+  color: var(--rose);
+  font-weight: 800;
+  padding: 12px;
+}
+
 .about {
   max-width: 760px;
   display: grid;

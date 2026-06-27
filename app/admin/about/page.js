@@ -19,6 +19,9 @@ export default async function AdminAboutPage({ searchParams }) {
         {params?.saved ? (
           <div className="success-state">About Me changes saved.</div>
         ) : null}
+        {params?.error ? (
+          <div className="error-state">{params.error}</div>
+        ) : null}
         <form action={updateAboutContent}>
           <label>
             About text
