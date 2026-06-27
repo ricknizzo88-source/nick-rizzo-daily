@@ -1,4 +1,5 @@
 import { Analytics } from "@vercel/analytics/next";
+import { cookies } from "next/headers";
 import "./globals.css";
 
 export const metadata = {
@@ -6,12 +7,15 @@ export const metadata = {
   description: "A searchable food tracker from Nick Rizzo Daily."
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const cookieStore = await cookies();
+  const analyticsOptOut = cookieStore.get("nrd_analytics_opt_out")?.value === "1";
+
   return (
     <html lang="en">
       <body>
         {children}
-        <Analytics />
+        {analyticsOptOut ? null : <Analytics />}
       </body>
     </html>
   );

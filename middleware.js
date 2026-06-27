@@ -6,6 +6,7 @@ const PROTECTED_PREFIXES = [
   "/admin/collaborations",
   "/admin/hidden",
   "/admin/about",
+  "/admin/analytics",
   "/places/edit"
 ];
 
@@ -46,6 +47,7 @@ export const config = {
     "/admin/collaborations/:path*",
     "/admin/hidden/:path*",
     "/admin/about/:path*",
+    "/admin/analytics/:path*",
     "/places/edit/:path*"
   ]
 };

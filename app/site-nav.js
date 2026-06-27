@@ -15,7 +15,8 @@ export function SiteNav({ active, includeAdmin = false }) {
             "/admin/collaborations",
             "collaborations-admin"
           ],
-          ["Edit About", "/admin/about", "about-admin"]
+          ["Edit About", "/admin/about", "about-admin"],
+          ["Analytics", "/admin/analytics", "analytics-admin"]
         ]
       : [])
   ];

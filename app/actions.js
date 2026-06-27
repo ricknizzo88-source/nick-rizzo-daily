@@ -66,6 +66,29 @@ export async function logoutAdmin() {
   redirect("/");
 }
 
+export async function optOutOfAnalytics() {
+  await requireAdmin();
+
+  const cookieStore = await cookies();
+  cookieStore.set("nrd_analytics_opt_out", "1", {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 365
+  });
+
+  redirect("/admin/analytics");
+}
+
+export async function optIntoAnalytics() {
+  await requireAdmin();
+
+  const cookieStore = await cookies();
+  cookieStore.delete("nrd_analytics_opt_out");
+  redirect("/admin/analytics");
+}
+
 export async function updateAboutContent(formData) {
   await requireAdmin();
 
