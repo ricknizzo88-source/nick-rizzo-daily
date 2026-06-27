@@ -96,4 +96,11 @@ export function PageShell({
         </div>
         <div className="header-actions">
           {count ? <p className="count">{count}</p> : null}
-          {socials ? <SocialL
+          {socials ? <SocialLinks /> : null}
+        </div>
+      </header>
+      <SiteNav active={active} includeAdmin={includeAdmin} />
+      {children}
+    </main>
+  );
+}
