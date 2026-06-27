@@ -1,5 +1,7 @@
 import { Analytics } from "@vercel/analytics/next";
 import { cookies } from "next/headers";
+import { Suspense } from "react";
+import { VisitorTracker } from "@/app/visitor-tracker";
 import "./globals.css";
 
 export const metadata = {
@@ -15,6 +17,9 @@ export default async function RootLayout({ children }) {
     <html lang="en">
       <body>
         {children}
+        <Suspense fallback={null}>
+          <VisitorTracker />
+        </Suspense>
         {analyticsOptOut ? null : <Analytics />}
       </body>
     </html>

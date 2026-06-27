@@ -351,6 +351,45 @@ p {
   stroke-width: 0;
 }
 
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.analytics-card {
+  display: grid;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  padding: 14px;
+}
+
+.analytics-card strong {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.analytics-table {
+  display: grid;
+  gap: 8px;
+}
+
+.analytics-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: center;
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+}
+
+.analytics-row span {
+  overflow-wrap: anywhere;
+}
+
 .video-embed {
   width: 100%;
   overflow: hidden;
@@ -491,6 +530,7 @@ form,
   .filters,
   .form-grid,
   .about-socials,
+  .analytics-grid,
   .place,
   .review-card {
     grid-template-columns: 1fr;
