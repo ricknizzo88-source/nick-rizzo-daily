@@ -28,6 +28,11 @@ A Next.js App Router app backed by Supabase. It imports Instagram Graph API medi
    - `INSTAGRAM_SYNC_LIMIT`
    - `ADMIN_PASSWORD`
    - `ADMIN_SESSION_TOKEN`
+   - `YOUTUBE_API_KEY`
+   - `YOUTUBE_CHANNEL_HANDLE`
+   - `YOUTUBE_CHANNEL_ID`
+   - `INSTAGRAM_FOLLOWER_COUNT`
+   - `TIKTOK_FOLLOWER_COUNT`
 4. Install dependencies and run the app:
 
 ```bash
@@ -45,6 +50,19 @@ npm run dev
 For deployment, set both `ADMIN_PASSWORD` and `ADMIN_SESSION_TOKEN` in Vercel.
 When both are present, the private admin pages require login at `/admin/login`.
 Use a long random value for `ADMIN_SESSION_TOKEN`.
+
+## Social stats
+
+The About page can show follower/subscriber counts on the social buttons.
+
+- `YOUTUBE_API_KEY`: server-only YouTube Data API key used to fetch subscriber count.
+- `YOUTUBE_CHANNEL_HANDLE`: YouTube handle, defaults to `@nickrizzodaily`.
+- `YOUTUBE_CHANNEL_ID`: optional exact channel ID. If this is set, it is used instead of the handle.
+- `INSTAGRAM_ACCESS_TOKEN` and `INSTAGRAM_USER_ID`: used to fetch Instagram follower count when Meta access is available.
+- `INSTAGRAM_FOLLOWER_COUNT`: optional manual fallback if the Instagram API is not ready.
+- `TIKTOK_FOLLOWER_COUNT`: optional manual TikTok follower count until TikTok API access is configured.
+
+Counts are cached for one hour by Next.js so the page stays fast and avoids API rate limits.
 
 ## Import Instagram posts
 
