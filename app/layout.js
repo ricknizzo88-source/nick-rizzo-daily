@@ -9,4 +9,19 @@ export const metadata = {
   description: "A searchable food tracker from Nick Rizzo Daily."
 };
 
-export default async function RootLayout
+export default async function RootLayout({ children }) {
+  const cookieStore = await cookies();
+  const analyticsOptOut = cookieStore.get("nrd_analytics_opt_out")?.value === "1";
+
+  return (
+    <html lang="en">
+      <body>
+        {children}
+        <Suspense fallback={null}>
+          <VisitorTracker />
+        </Suspense>
+        {analyticsOptOut ? null : <Analytics />}
+      </body>
+    </html>
+  );
+}

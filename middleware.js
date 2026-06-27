@@ -43,4 +43,11 @@ export function middleware(request) {
 export const config = {
   matcher: [
     "/review/:path*",
-    "/admin/places/:
+    "/admin/places/:path*",
+    "/admin/collaborations/:path*",
+    "/admin/hidden/:path*",
+    "/admin/about/:path*",
+    "/admin/analytics/:path*",
+    "/places/edit/:path*"
+  ]
+};
