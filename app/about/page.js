@@ -4,9 +4,9 @@ import { aboutParagraphs, loadAboutContent } from "@/lib/site-content";
 export const dynamic = "force-dynamic";
 
 const socialLinks = [
-  ["YouTube", "https://www.youtube.com/@nickrizzodaily", "youtube"],
   ["Instagram", "https://www.instagram.com/nick.rizzo.daily/", "instagram"],
-  ["TikTok", "https://www.tiktok.com/@nick.rizzo.daily", "tiktok"]
+  ["TikTok", "https://www.tiktok.com/@nick.rizzo.daily", "tiktok"],
+  ["YouTube", "https://www.youtube.com/@nickrizzodaily", "youtube"]
 ];
 
 export default async function AboutPage() {
@@ -23,6 +23,7 @@ export default async function AboutPage() {
         <div aria-label="Follow Nick Rizzo Daily" className="about-socials">
           {socialLinks.map(([label, href, icon]) => (
             <a
+              aria-label={label}
               className="about-social-link"
               href={href}
               key={label}
