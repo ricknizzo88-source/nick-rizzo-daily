@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { createSupabaseAdminClient } from "@/lib/supabase-admin";
 import { slugify } from "@/lib/directory-utils";
 
@@ -65,23 +66,39 @@ export async function updateAboutContent(formData) {
     throw new Error("About text is required.");
   }
 
-  const { error } = await supabase.from("site_settings").upsert(
-    {
-      key: "about",
-      value: {
-        body,
-        videoUrl: videoUrls[0] ?? "",
-        videoUrls
-      }
-    },
-    { onConflict: "key" }
-  );
+  const value = {
+    body,
+    videoUrl: videoUrls[0] ?? "",
+    videoUrls
+  };
+
+  const { data: existing, error: lookupError } = await supabase
+    .from("site_settings")
+    .select("key")
+    .eq("key", "about")
+    .maybeSingle();
+
+  if (lookupError) {
+    throw new Error(`Unable to load About Me setting: ${lookupError.message}`);
+  }
+
+  const { error } = existing
+    ? await supabase
+        .from("site_settings")
+        .update({ value })
+        .eq("key", "about")
+    : await supabase.from("site_settings").insert({
+        key: "about",
+        value
+      });
 
   if (error) {
     throw new Error(`Unable to update About Me content: ${error.message}`);
   }
 
-  redirect("/about");
+  revalidatePath("/about");
+  revalidatePath("/admin/about");
+  redirect("/admin/about?saved=1");
 }
 
 export async function createCollaboration(formData) {

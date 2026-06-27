@@ -270,6 +270,15 @@ textarea {
   text-align: center;
 }
 
+.success-state {
+  border: 1px solid rgba(0, 127, 115, 0.28);
+  border-radius: 8px;
+  background: rgba(0, 127, 115, 0.08);
+  color: var(--accent-ink);
+  font-weight: 800;
+  padding: 12px;
+}
+
 .about {
   max-width: 760px;
   display: grid;

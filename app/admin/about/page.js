@@ -4,7 +4,8 @@ import { aboutVideoUrls, loadAboutContent } from "@/lib/site-content";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminAboutPage() {
+export default async function AdminAboutPage({ searchParams }) {
+  const params = await searchParams;
   const content = await loadAboutContent({ admin: true });
   const videoUrls = aboutVideoUrls(content).join("\n");
 
@@ -15,6 +16,9 @@ export default async function AdminAboutPage() {
       includeAdmin
     >
       <section className="edit-panel">
+        {params?.saved ? (
+          <div className="success-state">About Me changes saved.</div>
+        ) : null}
         <form action={updateAboutContent}>
           <label>
             About text
