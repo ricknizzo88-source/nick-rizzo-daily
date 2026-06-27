@@ -1,6 +1,5 @@
 import { PageShell, SocialIcon } from "@/app/site-nav";
 import { aboutParagraphs, loadAboutContent } from "@/lib/site-content";
-import { getSocialStats } from "@/lib/social-stats";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +11,6 @@ const socialLinks = [
 
 export default async function AboutPage() {
   const content = await loadAboutContent();
-  const stats = await getSocialStats();
 
   return (
     <PageShell active="about" socials>
@@ -33,14 +31,7 @@ export default async function AboutPage() {
               target="_blank"
             >
               <SocialIcon name={icon} />
-              <span>
-                {label}
-                {stats[icon] ? (
-                  <small>
-                    {stats[icon]} {icon === "youtube" ? "subscribers" : "followers"}
-                  </small>
-                ) : null}
-              </span>
+              <span>{label}</span>
             </a>
           ))}
         </div>

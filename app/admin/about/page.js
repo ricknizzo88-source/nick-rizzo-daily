@@ -9,7 +9,11 @@ export default async function AdminAboutPage({ searchParams }) {
   const content = await loadAboutContent({ admin: true });
 
   return (
-    <PageShell active="about-admin" eyebrow="Edit About Me" includeAdmin>
+    <PageShell
+      active="about-admin"
+      eyebrow="Edit About Me"
+      includeAdmin
+    >
       <section className="edit-panel">
         {params?.saved ? (
           <div className="success-state">About Me changes saved.</div>

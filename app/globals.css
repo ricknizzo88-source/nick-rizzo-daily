@@ -346,22 +346,6 @@ p {
   stroke-width: 2;
 }
 
-.about-social-link span {
-  display: grid;
-  gap: 2px;
-}
-
-.about-social-link small {
-  color: var(--muted);
-  font-size: 0.72rem;
-  font-weight: 800;
-  line-height: 1.2;
-}
-
-.about-social-link:hover small {
-  color: var(--accent-ink);
-}
-
 .about-social-link[aria-label="YouTube"] svg path {
   fill: currentColor;
   stroke-width: 0;
