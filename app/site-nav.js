@@ -3,14 +3,18 @@ import Link from "next/link";
 export function SiteNav({ active, includeAdmin = false }) {
   const items = [
     ["Food Tracker", "/", "food"],
+    ["Brand Partnerships", "/collaborations", "collaborations"],
     ["About Me", "/about", "about"],
-    ["Past Collaborations", "/collaborations", "collaborations"],
     ...(includeAdmin
       ? [
           ["Review Queue", "/review", "review"],
           ["Manage Places", "/admin/places", "manage"],
           ["Hidden", "/admin/hidden", "hidden"],
-          ["Manage Collabs", "/admin/collaborations", "collaborations-admin"],
+          [
+            "Manage Partnerships",
+            "/admin/collaborations",
+            "collaborations-admin"
+          ],
           ["Edit About", "/admin/about", "about-admin"]
         ]
       : [])

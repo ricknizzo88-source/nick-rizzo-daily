@@ -19,7 +19,7 @@ export default async function ManageCollaborationsPage() {
     <PageShell
       active="collaborations-admin"
       count={`${collaborations.length} partners`}
-      eyebrow="Manage collaborations"
+      eyebrow="Manage brand partnerships"
       includeAdmin
     >
       <section className="edit-panel">
@@ -27,7 +27,7 @@ export default async function ManageCollaborationsPage() {
       </section>
 
       {collaborations.length === 0 ? (
-        <div className="empty-state">No collaborations added yet.</div>
+        <div className="empty-state">No brand partnerships added yet.</div>
       ) : (
         <section className="collaboration-list">
           {collaborations.map((partner) => (
