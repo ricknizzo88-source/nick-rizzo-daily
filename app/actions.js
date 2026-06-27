@@ -61,19 +61,13 @@ export async function updateAboutContent(formData) {
 
   const supabase = createSupabaseAdminClient();
   const body = String(formData.get("body") ?? "").trim();
-  const videoUrls = String(formData.get("video_urls") ?? "")
-    .split(/\n+/)
-    .map((url) => url.trim())
-    .filter(Boolean);
 
   if (!body) {
     aboutEditorError("About text is required.");
   }
 
   const value = {
-    body,
-    videoUrl: videoUrls[0] ?? "",
-    videoUrls
+    body
   };
 
   const { data: existing, error: lookupError } = await supabase

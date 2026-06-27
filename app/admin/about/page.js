@@ -1,13 +1,12 @@
 import { updateAboutContent } from "@/app/actions";
 import { PageShell } from "@/app/site-nav";
-import { aboutVideoUrls, loadAboutContent } from "@/lib/site-content";
+import { loadAboutContent } from "@/lib/site-content";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminAboutPage({ searchParams }) {
   const params = await searchParams;
   const content = await loadAboutContent({ admin: true });
-  const videoUrls = aboutVideoUrls(content).join("\n");
 
   return (
     <PageShell
@@ -30,15 +29,6 @@ export default async function AdminAboutPage({ searchParams }) {
               name="body"
               required
               rows={9}
-            />
-          </label>
-          <label>
-            Long-form video URLs
-            <textarea
-              defaultValue={videoUrls}
-              name="video_urls"
-              placeholder="https://www.youtube.com/watch?v=..."
-              rows={4}
             />
           </label>
           <div className="actions">

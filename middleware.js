@@ -43,9 +43,4 @@ export const config = {
   matcher: [
     "/review/:path*",
     "/admin/places/:path*",
-    "/admin/collaborations/:path*",
-    "/admin/hidden/:path*",
-    "/admin/about/:path*",
-    "/places/edit/:path*"
-  ]
-};
+    "/admin/co
