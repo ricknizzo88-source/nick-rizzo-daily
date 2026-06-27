@@ -249,6 +249,34 @@ before update on public.collaboration_videos
 for each row
 execute function public.set_updated_at();
 
+alter table public.collaboration_partners enable row level security;
+alter table public.collaboration_videos enable row level security;
+
+drop policy if exists "Public can read published collaboration partners"
+  on public.collaboration_partners;
+
+create policy "Public can read published collaboration partners"
+on public.collaboration_partners
+for select
+to anon, authenticated
+using (is_published = true);
+
+drop policy if exists "Public can read published collaboration videos"
+  on public.collaboration_videos;
+
+create policy "Public can read published collaboration videos"
+on public.collaboration_videos
+for select
+to anon, authenticated
+using (
+  exists (
+    select 1
+    from public.collaboration_partners
+    where collaboration_partners.id = collaboration_videos.partner_id
+      and collaboration_partners.is_published = true
+  )
+);
+
 create table if not exists public.site_settings (
   key text primary key,
   value jsonb not null default '{}'::jsonb,
@@ -337,72 +365,4 @@ group by food_videos.id, restaurants.id;
 alter table public.instagram_posts enable row level security;
 alter table public.restaurants enable row level security;
 alter table public.food_videos enable row level security;
-alter table public.directory_tags enable row level security;
-alter table public.food_video_tags enable row level security;
-alter table public.collections enable row level security;
-alter table public.collection_videos enable row level security;
-alter table public.site_settings enable row level security;
-
-drop policy if exists "Instagram posts are readable by everyone" on public.instagram_posts;
-drop policy if exists "Restaurants are readable by everyone" on public.restaurants;
-drop policy if exists "Published food videos are readable by everyone" on public.food_videos;
-drop policy if exists "Reviewable food videos are readable by everyone" on public.food_videos;
-drop policy if exists "Directory tags are readable by everyone" on public.directory_tags;
-drop policy if exists "Food video tags are readable by everyone" on public.food_video_tags;
-drop policy if exists "Published collections are readable by everyone" on public.collections;
-drop policy if exists "Collection videos are readable by everyone" on public.collection_videos;
-drop policy if exists "Site settings are readable by everyone" on public.site_settings;
-
-create policy "Instagram posts are readable by everyone"
-on public.instagram_posts
-for select
-using (true);
-
-create policy "Restaurants are readable by everyone"
-on public.restaurants
-for select
-using (true);
-
-create policy "Reviewable food videos are readable by everyone"
-on public.food_videos
-for select
-using (status in ('review', 'published'));
-
-create policy "Directory tags are readable by everyone"
-on public.directory_tags
-for select
-using (true);
-
-create policy "Food video tags are readable by everyone"
-on public.food_video_tags
-for select
-using (
-  exists (
-    select 1
-    from public.food_videos
-    where food_videos.id = food_video_tags.food_video_id
-      and food_videos.status = 'published'
-  )
-);
-
-create policy "Published collections are readable by everyone"
-on public.collections
-for select
-using (is_published = true);
-
-create policy "Collection videos are readable by everyone"
-on public.collection_videos
-for select
-using (
-  exists (
-    select 1
-    from public.collections
-    where collections.id = collection_videos.collection_id
-      and collections.is_published = true
-  )
-);
-
-create policy "Site settings are readable by everyone"
-on public.site_settings
-for select
-using (true);
+alter table

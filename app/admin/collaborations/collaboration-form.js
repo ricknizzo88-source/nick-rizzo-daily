@@ -14,8 +14,15 @@ export function CollaborationForm() {
           <input name="partner_name" placeholder="Brand or restaurant name" required />
         </label>
         <label>
-          Date
-          <input name="partnership_date" type="date" />
+          Year
+          <input
+            inputMode="numeric"
+            max="2100"
+            min="2000"
+            name="partnership_year"
+            placeholder="2026"
+            type="number"
+          />
         </label>
       </div>
 

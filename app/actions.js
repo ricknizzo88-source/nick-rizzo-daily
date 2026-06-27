@@ -89,7 +89,7 @@ export async function createCollaboration(formData) {
 
   const supabase = createSupabaseAdminClient();
   const partnerName = String(formData.get("partner_name") ?? "").trim();
-  const partnershipDate = String(formData.get("partnership_date") ?? "").trim();
+  const partnershipYear = String(formData.get("partnership_year") ?? "").trim();
   const videoTitles = formData
     .getAll("video_title")
     .map((value) => String(value ?? "").trim());
@@ -101,11 +101,13 @@ export async function createCollaboration(formData) {
     throw new Error("Partner name is required.");
   }
 
+  const partnershipDate = partnershipYear ? `${partnershipYear}-01-01` : null;
+
   const { data: partner, error } = await supabase
     .from("collaboration_partners")
     .insert({
       partner_name: partnerName,
-      partnership_date: partnershipDate || null,
+      partnership_date: partnershipDate,
       is_published: true
     })
     .select("id")

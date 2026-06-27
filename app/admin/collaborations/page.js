@@ -4,18 +4,12 @@ import { loadCollaborations } from "@/lib/collaborations";
 
 export const dynamic = "force-dynamic";
 
-const formatter = new Intl.DateTimeFormat("en", {
-  month: "short",
-  day: "numeric",
-  year: "numeric"
-});
-
-function formatDate(date) {
+function formatYear(date) {
   if (!date) {
-    return "Date TBD";
+    return "Year TBD";
   }
 
-  return formatter.format(new Date(`${date}T00:00:00`));
+  return new Date(`${date}T00:00:00`).getFullYear();
 }
 
 export default async function ManageCollaborationsPage() {
@@ -41,7 +35,7 @@ export default async function ManageCollaborationsPage() {
               <div>
                 <h2>{partner.partner_name}</h2>
                 <div className="meta">
-                  {formatDate(partner.partnership_date)}
+                  {formatYear(partner.partnership_date)}
                   {partner.is_published ? "" : " / Hidden"}
                 </div>
               </div>

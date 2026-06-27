@@ -416,24 +416,4 @@ form,
 }
 
 @media (max-width: 720px) {
-  .page-shell {
-    width: min(100% - 24px, 1180px);
-    padding-top: 28px;
-  }
-
-  .masthead {
-    display: grid;
-    align-items: start;
-  }
-
-  .header-actions {
-    justify-items: start;
-  }
-
-  .filters,
-  .form-grid,
-  .place,
-  .review-card {
-    grid-template-columns: 1fr;
-  }
-}
+  .page-shel

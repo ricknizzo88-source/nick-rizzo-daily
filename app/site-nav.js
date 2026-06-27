@@ -4,7 +4,7 @@ export function SiteNav({ active, includeAdmin = false }) {
   const items = [
     ["Food Tracker", "/", "food"],
     ["About Me", "/about", "about"],
-    ["Collaborations", "/collaborations", "collaborations"],
+    ["Past Collaborations", "/collaborations", "collaborations"],
     ...(includeAdmin
       ? [
           ["Review Queue", "/review", "review"],
@@ -96,11 +96,4 @@ export function PageShell({
         </div>
         <div className="header-actions">
           {count ? <p className="count">{count}</p> : null}
-          {socials ? <SocialLinks /> : null}
-        </div>
-      </header>
-      <SiteNav active={active} includeAdmin={includeAdmin} />
-      {children}
-    </main>
-  );
-}
+          {socials ? <SocialL

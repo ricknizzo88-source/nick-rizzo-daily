@@ -3,18 +3,12 @@ import { loadCollaborations } from "@/lib/collaborations";
 
 export const dynamic = "force-dynamic";
 
-const formatter = new Intl.DateTimeFormat("en", {
-  month: "short",
-  day: "numeric",
-  year: "numeric"
-});
-
-function formatDate(date) {
+function formatYear(date) {
   if (!date) {
-    return "Date TBD";
+    return "Year TBD";
   }
 
-  return formatter.format(new Date(`${date}T00:00:00`));
+  return new Date(`${date}T00:00:00`).getFullYear();
 }
 
 export default async function CollaborationsPage() {
@@ -28,7 +22,6 @@ export default async function CollaborationsPage() {
     <PageShell
       active="collaborations"
       count={`${videoCount} videos`}
-      eyebrow="Past collaborations"
       socials
     >
       {collaborations.length === 0 ? (
@@ -39,7 +32,7 @@ export default async function CollaborationsPage() {
             <article className="collaboration-card" key={partner.id}>
               <div>
                 <h2>{partner.partner_name}</h2>
-                <div className="meta">{formatDate(partner.partnership_date)}</div>
+                <div className="meta">{formatYear(partner.partnership_date)}</div>
               </div>
               {partner.videos.length ? (
                 <div className="chips">
