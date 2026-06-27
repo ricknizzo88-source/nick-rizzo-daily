@@ -200,6 +200,25 @@ textarea {
   gap: 10px;
 }
 
+.collaboration-list {
+  display: grid;
+  gap: 12px;
+}
+
+.collaboration-card {
+  display: grid;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  padding: 16px;
+}
+
+.collaboration-card h2 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
 .place {
   display: grid;
   grid-template-columns: 1fr auto;

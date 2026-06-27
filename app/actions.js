@@ -84,6 +84,59 @@ export async function updateAboutContent(formData) {
   redirect("/about");
 }
 
+export async function createCollaboration(formData) {
+  await requireAdmin();
+
+  const supabase = createSupabaseAdminClient();
+  const partnerName = String(formData.get("partner_name") ?? "").trim();
+  const partnershipDate = String(formData.get("partnership_date") ?? "").trim();
+  const videoTitles = formData
+    .getAll("video_title")
+    .map((value) => String(value ?? "").trim());
+  const videoUrls = formData
+    .getAll("video_url")
+    .map((value) => String(value ?? "").trim());
+
+  if (!partnerName) {
+    throw new Error("Partner name is required.");
+  }
+
+  const { data: partner, error } = await supabase
+    .from("collaboration_partners")
+    .insert({
+      partner_name: partnerName,
+      partnership_date: partnershipDate || null,
+      is_published: true
+    })
+    .select("id")
+    .single();
+
+  if (error) {
+    throw new Error(`Unable to create collaboration: ${error.message}`);
+  }
+
+  const videos = videoUrls
+    .map((url, index) => ({
+      partner_id: partner.id,
+      title: videoTitles[index] || `Video ${index + 1}`,
+      url,
+      sort_order: index
+    }))
+    .filter((video) => video.url);
+
+  if (videos.length > 0) {
+    const { error: videoError } = await supabase
+      .from("collaboration_videos")
+      .insert(videos);
+
+    if (videoError) {
+      throw new Error(`Unable to save collaboration videos: ${videoError.message}`);
+    }
+  }
+
+  redirect("/admin/collaborations");
+}
+
 export async function updatePlace(formData) {
   await requireAdmin();
 
