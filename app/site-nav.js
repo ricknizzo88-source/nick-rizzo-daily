@@ -31,7 +31,7 @@ export function SiteNav({ active, includeAdmin = false }) {
   );
 }
 
-function SocialIcon({ name }) {
+export function SocialIcon({ name }) {
   if (name === "instagram") {
     return (
       <svg aria-hidden="true" viewBox="0 0 24 24">

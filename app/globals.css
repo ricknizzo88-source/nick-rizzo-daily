@@ -311,6 +311,46 @@ p {
   line-height: 1.5;
 }
 
+.about-socials {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.about-social-link {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--ink);
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.about-social-link:hover {
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.about-social-link svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.about-social-link:first-child svg path {
+  fill: currentColor;
+  stroke-width: 0;
+}
+
 .video-embed {
   width: 100%;
   overflow: hidden;
@@ -450,6 +490,7 @@ form,
 
   .filters,
   .form-grid,
+  .about-socials,
   .place,
   .review-card {
     grid-template-columns: 1fr;
