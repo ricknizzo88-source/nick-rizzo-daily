@@ -41,6 +41,10 @@ export default async function EditPlacePage({ searchParams }) {
               <input defaultValue={place.city || "Seattle"} name="city" />
             </label>
             <label>
+              State
+              <input defaultValue={place.state || "WA"} name="state" />
+            </label>
+            <label>
               Category
               <input
                 defaultValue={place.category || ""}

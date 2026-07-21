@@ -299,6 +299,7 @@ export async function updatePlace(formData) {
   const id = String(formData.get("id") ?? "").trim();
   const name = String(formData.get("name") ?? "").trim();
   const city = String(formData.get("city") ?? "").trim() || "Seattle";
+  const state = String(formData.get("state") ?? "").trim() || "WA";
   const category = String(formData.get("category") ?? "").trim() || null;
 
   if (!id || !name) {
@@ -313,6 +314,7 @@ export async function updatePlace(formData) {
       name,
       slug,
       city,
+      region: state,
       notes: category
     })
     .eq("id", id);
@@ -325,7 +327,7 @@ export async function updatePlace(formData) {
     .from("food_videos")
     .update({
       city,
-      region: "WA"
+      region: state
     })
     .eq("restaurant_id", id);
 
@@ -444,6 +446,7 @@ export async function saveReviewPlace(formData) {
   }
 
   const city = String(formData.get("city") ?? "").trim() || "Seattle";
+  const state = String(formData.get("state") ?? "").trim() || "WA";
   const category = String(formData.get("category") ?? "").trim() || null;
   const slug = slugify([placeName, city].filter(Boolean).join(" "));
 
@@ -454,7 +457,7 @@ export async function saveReviewPlace(formData) {
         name: placeName,
         slug,
         city,
-        region: "WA",
+        region: state,
         country: "US",
         notes: category
       },
@@ -473,7 +476,7 @@ export async function saveReviewPlace(formData) {
       restaurant_id: restaurant.id,
       dish_name: category,
       city,
-      region: "WA",
+      region: state,
       status: "published"
     })
     .eq("id", videoId);
@@ -496,6 +499,7 @@ export async function createManualPlace(formData) {
   }
 
   const city = String(formData.get("city") ?? "").trim() || "Seattle";
+  const state = String(formData.get("state") ?? "").trim() || "WA";
   const category = String(formData.get("category") ?? "").trim() || null;
   const videoUrl = String(formData.get("video_url") ?? "").trim() || null;
   const slug = slugify([placeName, city].filter(Boolean).join(" "));
@@ -507,7 +511,7 @@ export async function createManualPlace(formData) {
         name: placeName,
         slug,
         city,
-        region: "WA",
+        region: state,
         country: "US",
         notes: category
       },
@@ -532,7 +536,7 @@ export async function createManualPlace(formData) {
       published_at: new Date().toISOString(),
       status: "published",
       city,
-      region: "WA",
+      region: state,
       country: "US",
       raw: { source: "manual" }
     });

@@ -24,6 +24,7 @@ export function DirectoryGrid({
 }) {
   const [query, setQuery] = useState("");
   const [city, setCity] = useState("");
+  const [state, setState] = useState("");
   const [category, setCategory] = useState("");
 
   const cities = useMemo(
@@ -40,10 +41,18 @@ export function DirectoryGrid({
       ),
     [places]
   );
+  const states = useMemo(
+    () =>
+      [...new Set(places.map((place) => place.state).filter(Boolean))].sort(
+        (a, b) => a.localeCompare(b)
+      ),
+    [places]
+  );
 
   const filteredPlaces = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
     const normalizedCity = city.trim().toLowerCase();
+    const normalizedState = state.trim().toLowerCase();
     const normalizedCategory = category.trim().toLowerCase();
 
     return places.filter((place) => {
@@ -55,10 +64,12 @@ export function DirectoryGrid({
         (!normalizedQuery ||
           place.name.toLowerCase().includes(normalizedQuery)) &&
         (!normalizedCity || (place.city ?? "").toLowerCase() === normalizedCity) &&
+        (!normalizedState ||
+          (place.state ?? "").toLowerCase() === normalizedState) &&
         (!normalizedCategory || placeCategories.includes(normalizedCategory))
       );
     });
-  }, [category, city, places, query]);
+  }, [category, city, places, query, state]);
 
   const grouped = groupPlaces(filteredPlaces);
 
@@ -107,6 +118,17 @@ export function DirectoryGrid({
             ))}
           </select>
         </label>
+        <label>
+          State
+          <select onChange={(event) => setState(event.target.value)} value={state}>
+            <option value="">All states</option>
+            {states.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
+        </label>
       </section>
 
       {filteredPlaces.length === 0 ? (
@@ -122,7 +144,9 @@ export function DirectoryGrid({
                     <div>
                       <h2>{place.name}</h2>
                       <div className="meta">
-                        {[place.city, place.category].filter(Boolean).join(", ") ||
+                        {[place.city, place.state, place.category]
+                          .filter(Boolean)
+                          .join(", ") ||
                           "Location TBD"}
                       </div>
                       <div className="chips">

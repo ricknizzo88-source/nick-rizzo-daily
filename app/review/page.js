@@ -42,6 +42,10 @@ export default async function ReviewPage() {
               <input defaultValue="Seattle" name="city" />
             </label>
             <label>
+              State
+              <input defaultValue="WA" name="state" />
+            </label>
+            <label>
               Category
               <input name="category" placeholder="Ramen" />
             </label>
@@ -104,6 +108,10 @@ export default async function ReviewPage() {
                       <label>
                         City
                         <input defaultValue="Seattle" name="city" />
+                      </label>
+                      <label>
+                        State
+                        <input defaultValue="WA" name="state" />
                       </label>
                       <label>
                         Category
