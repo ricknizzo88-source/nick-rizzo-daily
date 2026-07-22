@@ -15,11 +15,14 @@ function Detail({ label, value, link = false }) {
     return null;
   }
 
+  const href =
+    link && /^https?:\/\//i.test(value) ? value : link ? `https://${value}` : "";
+
   return (
     <div className="application-detail">
       <span>{label}</span>
       {link ? (
-        <a className="link" href={value} rel="noreferrer" target="_blank">
+        <a className="link" href={href} rel="noreferrer" target="_blank">
           {value}
         </a>
       ) : (

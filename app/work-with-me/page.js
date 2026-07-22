@@ -42,10 +42,11 @@ export default async function WorkWithMePage({ searchParams }) {
                     />
                   ) : (
                     <input
+                      inputMode={field.type === "url" ? "url" : undefined}
                       name={field.id}
                       placeholder={field.placeholder}
                       required={field.required}
-                      type={field.type}
+                      type={field.type === "url" ? "text" : field.type}
                     />
                   )}
                 </label>
