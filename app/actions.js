@@ -244,8 +244,8 @@ export async function submitVideoEditorApplication(formData) {
     }
   }
 
-  if (!fieldResponses.email && !fieldResponses.social_links) {
-    workWithMeError("Email or social link is required.");
+  if (!fieldResponses.social_links) {
+    workWithMeError("Social link is required.");
   }
 
   const { error } = await supabase.from("video_editor_applications").insert({
