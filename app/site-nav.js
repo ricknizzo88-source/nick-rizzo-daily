@@ -4,6 +4,7 @@ export function SiteNav({ active, includeAdmin = false }) {
   const items = [
     ["Food Tracker", "/", "food"],
     ["Brand Partnerships", "/collaborations", "collaborations"],
+    ["Work With Me", "/work-with-me", "work"],
     ["About Me", "/about", "about"],
     ...(includeAdmin
       ? [
@@ -16,7 +17,8 @@ export function SiteNav({ active, includeAdmin = false }) {
             "collaborations-admin"
           ],
           ["Edit About", "/admin/about", "about-admin"],
-          ["Analytics", "/admin/analytics", "analytics-admin"]
+          ["Analytics", "/admin/analytics", "analytics-admin"],
+          ["Applications", "/admin/applications", "applications-admin"]
         ]
       : [])
   ];

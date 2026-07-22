@@ -14,6 +14,10 @@ function aboutEditorError(message) {
   redirect(`/admin/about?error=${encodeURIComponent(message)}`);
 }
 
+function workWithMeError(message) {
+  redirect(`/work-with-me?error=${encodeURIComponent(message)}`);
+}
+
 function yearToDate(year) {
   const value = String(year ?? "").trim();
 
@@ -130,6 +134,50 @@ export async function updateAboutContent(formData) {
   revalidatePath("/about");
   revalidatePath("/admin/about");
   redirect("/admin/about?saved=1");
+}
+
+export async function submitVideoEditorApplication(formData) {
+  const supabase = createSupabaseAdminClient();
+  const fullName = String(formData.get("full_name") ?? "").trim();
+  const email = String(formData.get("email") ?? "").trim();
+  const timezone = String(formData.get("timezone") ?? "").trim() || null;
+  const portfolioUrl = String(formData.get("portfolio_url") ?? "").trim() || null;
+  const socialLinks = String(formData.get("social_links") ?? "").trim() || null;
+  const editingSoftware =
+    String(formData.get("editing_software") ?? "").trim() || null;
+  const availability = String(formData.get("availability") ?? "").trim() || null;
+  const rateExpectation =
+    String(formData.get("rate_expectation") ?? "").trim() || null;
+  const fitNotes = String(formData.get("fit_notes") ?? "").trim() || null;
+  const website = String(formData.get("website") ?? "").trim();
+
+  if (website) {
+    redirect("/work-with-me?submitted=1");
+  }
+
+  if (!fullName || !email || !portfolioUrl) {
+    workWithMeError("Name, email, and portfolio are required.");
+  }
+
+  const { error } = await supabase.from("video_editor_applications").insert({
+    full_name: fullName,
+    email,
+    timezone,
+    portfolio_url: portfolioUrl,
+    social_links: socialLinks,
+    editing_software: editingSoftware,
+    availability,
+    rate_expectation: rateExpectation,
+    fit_notes: fitNotes,
+    status: "new"
+  });
+
+  if (error) {
+    workWithMeError(`Unable to submit application: ${error.message}`);
+  }
+
+  revalidatePath("/admin/applications");
+  redirect("/work-with-me?submitted=1");
 }
 
 export async function createCollaboration(formData) {

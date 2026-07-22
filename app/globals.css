@@ -294,6 +294,12 @@ textarea {
   gap: 18px;
 }
 
+.work-page {
+  max-width: 860px;
+  display: grid;
+  gap: 18px;
+}
+
 .about-card,
 .edit-panel {
   display: grid;
@@ -388,6 +394,53 @@ p {
 
 .analytics-row span {
   overflow-wrap: anywhere;
+}
+
+.application-list {
+  display: grid;
+  gap: 14px;
+}
+
+.application-card {
+  display: grid;
+  gap: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  padding: 16px;
+}
+
+.application-card h2 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.application-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.application-detail {
+  display: grid;
+  gap: 4px;
+}
+
+.application-detail span {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.application-detail p,
+.application-detail a {
+  overflow-wrap: anywhere;
+}
+
+.hidden-field {
+  position: absolute;
+  left: -9999px;
 }
 
 .video-embed {
@@ -529,6 +582,7 @@ form,
 
   .filters,
   .form-grid,
+  .application-grid,
   .about-socials,
   .analytics-grid,
   .place,
