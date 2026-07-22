@@ -94,17 +94,6 @@ export function DirectoryGrid({
           />
         </label>
         <label>
-          City
-          <select onChange={(event) => setCity(event.target.value)} value={city}>
-            <option value="">All cities</option>
-            {cities.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
           Category
           <select
             onChange={(event) => setCategory(event.target.value)}
@@ -123,6 +112,17 @@ export function DirectoryGrid({
           <select onChange={(event) => setState(event.target.value)} value={state}>
             <option value="">All states</option>
             {states.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          City
+          <select onChange={(event) => setCity(event.target.value)} value={city}>
+            <option value="">All cities</option>
+            {cities.map((item) => (
               <option key={item} value={item}>
                 {item}
               </option>
