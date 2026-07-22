@@ -245,10 +245,10 @@ export async function submitVideoEditorApplication(formData) {
   }
 
   const { error } = await supabase.from("video_editor_applications").insert({
-    full_name: fieldResponses.full_name,
-    email: fieldResponses.email,
+    full_name: fieldResponses.full_name || "",
+    email: fieldResponses.email || "",
     timezone: fieldResponses.timezone || null,
-    portfolio_url: fieldResponses.portfolio_url,
+    portfolio_url: fieldResponses.portfolio_url || "",
     social_links: fieldResponses.social_links || null,
     editing_software: fieldResponses.editing_software || null,
     availability: fieldResponses.availability || null,
