@@ -1,24 +1,22 @@
 import { submitVideoEditorApplication } from "@/app/actions";
 import { PageShell } from "@/app/site-nav";
+import { aboutParagraphs } from "@/lib/site-content";
+import { loadWorkWithMeContent } from "@/lib/work-with-me";
 
 export const dynamic = "force-dynamic";
 
 export default async function WorkWithMePage({ searchParams }) {
   const params = await searchParams;
+  const content = await loadWorkWithMeContent();
 
   return (
     <PageShell active="work" socials>
       <section className="work-page">
         <div className="about-card">
-          <h2 className="compact-title">Video Editor Application</h2>
-          <p>
-            I am looking for a video editor who understands short-form pacing,
-            food content, daily life videos, and clean social-first storytelling.
-          </p>
-          <p>
-            If you have examples of Reels, TikToks, Shorts, or creator-style
-            edits, send them here and I will review them.
-          </p>
+          <h2 className="compact-title">{content.title}</h2>
+          {aboutParagraphs(content.description).map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
         </div>
 
         <section className="edit-panel">
@@ -31,60 +29,28 @@ export default async function WorkWithMePage({ searchParams }) {
             <div className="error-state">{params.error}</div>
           ) : null}
           <form action={submitVideoEditorApplication}>
-            <div className="form-grid">
-              <label>
-                Name
-                <input name="full_name" required />
-              </label>
-              <label>
-                Email
-                <input name="email" required type="email" />
-              </label>
-              <label>
-                Time zone
-                <input name="timezone" placeholder="Pacific" />
-              </label>
+            <div className="work-form-fields">
+              {content.fields.map((field) => (
+                <label key={field.id}>
+                  {field.label}
+                  {field.type === "textarea" ? (
+                    <textarea
+                      name={field.id}
+                      placeholder={field.placeholder}
+                      required={field.required}
+                      rows={field.id === "fit_notes" ? 5 : 3}
+                    />
+                  ) : (
+                    <input
+                      name={field.id}
+                      placeholder={field.placeholder}
+                      required={field.required}
+                      type={field.type}
+                    />
+                  )}
+                </label>
+              ))}
             </div>
-
-            <label>
-              Portfolio link
-              <input
-                name="portfolio_url"
-                placeholder="Website, Google Drive, YouTube, TikTok, etc."
-                required
-                type="url"
-              />
-            </label>
-
-            <label>
-              Social links
-              <textarea
-                name="social_links"
-                placeholder="Instagram, TikTok, YouTube, LinkedIn, etc."
-                rows={3}
-              />
-            </label>
-
-            <div className="form-grid">
-              <label>
-                Editing software
-                <input name="editing_software" placeholder="Premiere, CapCut, etc." />
-              </label>
-              <label>
-                Availability
-                <input name="availability" placeholder="10 hrs/week" />
-              </label>
-              <label>
-                Rate expectations
-                <input name="rate_expectation" placeholder="$ per video or hour" />
-              </label>
-            </div>
-
-            <label>
-              Why would you be a good fit?
-              <textarea name="fit_notes" rows={5} />
-            </label>
-
             <label className="hidden-field">
               Website
               <input name="website" tabIndex={-1} />

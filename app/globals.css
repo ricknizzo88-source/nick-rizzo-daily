@@ -465,6 +465,20 @@ form,
   gap: 10px;
 }
 
+.work-form-fields,
+.field-builder {
+  display: grid;
+  gap: 12px;
+}
+
+.field-row {
+  display: grid;
+  gap: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+}
+
 .form-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;

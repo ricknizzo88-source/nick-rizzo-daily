@@ -466,6 +466,7 @@ create table if not exists public.video_editor_applications (
   availability text,
   rate_expectation text,
   fit_notes text,
+  field_responses jsonb not null default '{}'::jsonb,
   status text not null default 'new',
   created_at timestamptz not null default now()
 );

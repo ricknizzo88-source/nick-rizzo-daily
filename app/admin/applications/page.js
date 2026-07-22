@@ -1,5 +1,6 @@
 import { PageShell } from "@/app/site-nav";
 import { loadVideoEditorApplications } from "@/lib/applications";
+import { loadWorkWithMeContent } from "@/lib/work-with-me";
 
 export const dynamic = "force-dynamic";
 
@@ -28,8 +29,13 @@ function Detail({ label, value, link = false }) {
   );
 }
 
+function responseValue(application, field) {
+  return application.field_responses?.[field.id] ?? application[field.id];
+}
+
 export default async function ApplicationsPage() {
   const applications = await loadVideoEditorApplications();
+  const content = await loadWorkWithMeContent({ admin: true });
 
   return (
     <PageShell
@@ -52,24 +58,14 @@ export default async function ApplicationsPage() {
                 </div>
               </div>
               <div className="application-grid">
-                <Detail label="Email" value={application.email} />
-                <Detail label="Time zone" value={application.timezone} />
-                <Detail
-                  label="Portfolio"
-                  link
-                  value={application.portfolio_url}
-                />
-                <Detail label="Social links" value={application.social_links} />
-                <Detail
-                  label="Editing software"
-                  value={application.editing_software}
-                />
-                <Detail label="Availability" value={application.availability} />
-                <Detail
-                  label="Rate expectations"
-                  value={application.rate_expectation}
-                />
-                <Detail label="Fit notes" value={application.fit_notes} />
+                {content.fields.map((field) => (
+                  <Detail
+                    key={field.id}
+                    label={field.label}
+                    link={field.type === "url"}
+                    value={responseValue(application, field)}
+                  />
+                ))}
               </div>
             </article>
           ))}

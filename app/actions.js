@@ -5,6 +5,13 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createSupabaseAdminClient } from "@/lib/supabase-admin";
 import { slugify } from "@/lib/directory-utils";
+import {
+  DEFAULT_WORK_WITH_ME_FIELDS,
+  WORK_FIELD_TYPES,
+  loadWorkWithMeContent,
+  validWorkFieldId,
+  workFieldById
+} from "@/lib/work-with-me";
 
 function adminAuthConfigured() {
   return Boolean(process.env.ADMIN_PASSWORD && process.env.ADMIN_SESSION_TOKEN);
@@ -16,6 +23,10 @@ function aboutEditorError(message) {
 
 function workWithMeError(message) {
   redirect(`/work-with-me?error=${encodeURIComponent(message)}`);
+}
+
+function workWithMeEditorError(message) {
+  redirect(`/admin/work-with-me?error=${encodeURIComponent(message)}`);
 }
 
 function yearToDate(year) {
@@ -136,39 +147,114 @@ export async function updateAboutContent(formData) {
   redirect("/admin/about?saved=1");
 }
 
+export async function updateWorkWithMeContent(formData) {
+  await requireAdmin();
+
+  const supabase = createSupabaseAdminClient();
+  const title = String(formData.get("title") ?? "").trim();
+  const description = String(formData.get("description") ?? "").trim();
+  const ids = formData
+    .getAll("field_id")
+    .map((value) => String(value ?? "").trim())
+    .filter(validWorkFieldId);
+
+  if (!title || !description) {
+    workWithMeEditorError("Title and description are required.");
+  }
+
+  const fields = ids
+    .map((id) => {
+      const defaultField = workFieldById(id);
+      const label = String(
+        formData.get(`field_label_${id}`) ?? defaultField?.label ?? ""
+      ).trim();
+      const submittedType = String(formData.get(`field_type_${id}`) ?? "text");
+      const type = WORK_FIELD_TYPES.includes(submittedType)
+        ? submittedType
+        : "text";
+
+      if (!label) {
+        return null;
+      }
+
+      return {
+        id,
+        label,
+        type: defaultField?.locked ? defaultField.type : type,
+        placeholder: String(
+          formData.get(`field_placeholder_${id}`) ??
+            defaultField?.placeholder ??
+            ""
+        ),
+        required:
+          Boolean(defaultField?.locked) ||
+          formData.get(`field_required_${id}`) === "on",
+        locked: Boolean(defaultField?.locked)
+      };
+    })
+    .filter(Boolean);
+
+  const fieldIds = new Set(fields.map((field) => field.id));
+
+  for (const defaultField of DEFAULT_WORK_WITH_ME_FIELDS) {
+    if (defaultField.locked && !fieldIds.has(defaultField.id)) {
+      fields.push(defaultField);
+    }
+  }
+
+  const value = {
+    title,
+    description,
+    fields
+  };
+
+  const { error } = await supabase.from("site_settings").upsert(
+    {
+      key: "work_with_me",
+      value
+    },
+    { onConflict: "key" }
+  );
+
+  if (error) {
+    workWithMeEditorError(`Unable to update Work With Me: ${error.message}`);
+  }
+
+  revalidatePath("/work-with-me");
+  revalidatePath("/admin/work-with-me");
+  redirect("/admin/work-with-me?saved=1");
+}
+
 export async function submitVideoEditorApplication(formData) {
   const supabase = createSupabaseAdminClient();
-  const fullName = String(formData.get("full_name") ?? "").trim();
-  const email = String(formData.get("email") ?? "").trim();
-  const timezone = String(formData.get("timezone") ?? "").trim() || null;
-  const portfolioUrl = String(formData.get("portfolio_url") ?? "").trim() || null;
-  const socialLinks = String(formData.get("social_links") ?? "").trim() || null;
-  const editingSoftware =
-    String(formData.get("editing_software") ?? "").trim() || null;
-  const availability = String(formData.get("availability") ?? "").trim() || null;
-  const rateExpectation =
-    String(formData.get("rate_expectation") ?? "").trim() || null;
-  const fitNotes = String(formData.get("fit_notes") ?? "").trim() || null;
+  const content = await loadWorkWithMeContent({ admin: true });
+  const fieldResponses = {};
   const website = String(formData.get("website") ?? "").trim();
 
   if (website) {
     redirect("/work-with-me?submitted=1");
   }
 
-  if (!fullName || !email || !portfolioUrl) {
-    workWithMeError("Name, email, and portfolio are required.");
+  for (const field of content.fields) {
+    const value = String(formData.get(field.id) ?? "").trim();
+    fieldResponses[field.id] = value;
+
+    if (field.required && !value) {
+      workWithMeError(`${field.label} is required.`);
+    }
   }
 
   const { error } = await supabase.from("video_editor_applications").insert({
-    full_name: fullName,
-    email,
-    timezone,
-    portfolio_url: portfolioUrl,
-    social_links: socialLinks,
-    editing_software: editingSoftware,
-    availability,
-    rate_expectation: rateExpectation,
-    fit_notes: fitNotes,
+    full_name: fieldResponses.full_name,
+    email: fieldResponses.email,
+    timezone: fieldResponses.timezone || null,
+    portfolio_url: fieldResponses.portfolio_url,
+    social_links: fieldResponses.social_links || null,
+    editing_software: fieldResponses.editing_software || null,
+    availability: fieldResponses.availability || null,
+    rate_expectation: fieldResponses.rate_expectation || null,
+    fit_notes: fieldResponses.fit_notes || null,
+    field_responses: fieldResponses,
     status: "new"
   });
 
